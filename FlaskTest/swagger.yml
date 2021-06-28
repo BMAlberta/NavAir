@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /metar:
+    get:
+      operationId: metar.read
+      tags:
+        - METAR
+      summary: The METAR data structure supported by the server application
+      description: Read the METAR for a given ICAO
+      responses:
+        200:
+          description: Successful read METAR list operation
+          schema:
+            type: array
+            items:
+              properties:
+                icao:
+                  type: string
+                airportName:
+                  type: string
+                timestamp:
+                  type: string
+
+  /airport/list:
+      get:
+        operationId: services.airport.list
+        tags:
+          - airports
+        summary: Airport data structure
+        parameters:
+          - in: query
+            name: locale
+            type: string
+            description: Short string represnting the continent used to list airports. Empty values defaults to NA-US
+            required: false
+            default: default
+        description: Aggregation of all airport/runway data
+        responses:
+          200:
+            description: Success
+            schema:
+              $ref: '#/definitions/Airport'
+
+
+definitions:
+  Airport:
+    type: object
+    properties:
+      icao:
+        type: string
+        description: ICAO (International Civil Aviation Organization) identifier.
+      name:
+        type: string
+        description: Name of the airport
+      type:
+        type: string
+        description: Type of airport (heli port, small, medium, large airport)
+      lat:
+        type: string
+        description: Latitude (degrees) for airport
+      lon:
+        type: string
+        description: Longitude (degrees) for airport
+      elevation:
+        type: integer
+        description: Altiude (relative to sea level) of airport
+      continent:
+        type: string
+        description: Short string representing the continent in which the airport resides
+      country:
+        type: string
+        description: Short string representing the country in which the airport resides
+      region:
+        type: string
+        description: Short string representing the region in which the airport resides
+
+    example:
+      icao: "KCMH"
+      name: "John Glenn International Airport"
+      type: "large_airport"
+      lat: "39.998001"
+      lon: "-82.891899"
+      elevation: 815
+      continent: "NA"
+      country: "US"
+      region: "US-OH"
+
+  Runway:
+    type: object
+    description: Object representing the details of a given runway
+    properties:
+      id:
+        type: string
+        description: String representation of the runway (eg. 10R)
+      elevation:
+        type: integer
+        description: Altitude of the runway threshold
+      length:
+        type: integer
+        description: Usable runway length (less blast pads)
+    example:
+      id: "10R"
+      elevation: 815
+      length: 12500

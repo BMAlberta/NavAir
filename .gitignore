@@ -1,0 +1,11 @@
+
+*.xml
+*.iml
+api/.DS_Store
+*.pyc
+api/venv/*
+FlaskTest/venv/*
+data/.DS_Store
+api/config/config.ini
+*.ini
+METAR.txt
